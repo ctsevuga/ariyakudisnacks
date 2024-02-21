@@ -23,8 +23,10 @@ import Message from "../components/Message";
 import Meta from "../components/Meta";
 import { addToCart } from "../slices/cartSlice";
 
+
 const ProductScreen = () => {
   const { id: productId } = useParams();
+  const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,9 +36,17 @@ const ProductScreen = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
+  const userId = userInfo? userInfo._id: undefined;
+  console.log(userId);
+
   const addToCartHandler = () => {
+    console.log(userId);
+    // if(userId === undefined) {
+    //   navigate('/login')
+    // }
     dispatch(addToCart({ ...product, qty, measurement }));
-    navigate("/cart");
+    navigate('/login?redirect=/cart');
+    // navigate("/cart");
   };
 
   const {
@@ -46,7 +56,7 @@ const ProductScreen = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
-  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
 
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();
