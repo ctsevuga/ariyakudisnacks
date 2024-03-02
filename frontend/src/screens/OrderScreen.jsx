@@ -80,7 +80,8 @@ const OrderScreen = () => {
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>
-                  Delivered on {order.deliveredAt}
+                  {/* Delivered on {order.deliveredAt} */}
+                  Delivered on
                 </Message>
               ) : (
                 <Message variant='danger'>Not Delivered</Message>
