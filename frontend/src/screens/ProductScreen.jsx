@@ -1,17 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Card,
-  Button,
-  Form,
-  Select,
-} from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Row, Col, ListGroup, Card, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
@@ -23,11 +14,10 @@ import Message from "../components/Message";
 import Meta from "../components/Meta";
 import { addToCart } from "../slices/cartSlice";
 
-
 const ProductScreen = () => {
   const { id: productId } = useParams();
-  const { userInfo } = useSelector((state) => state.auth);
 
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,17 +26,15 @@ const ProductScreen = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  const userId = userInfo? userInfo._id: undefined;
-  console.log(userId);
-
   const addToCartHandler = () => {
-    console.log(userId);
-    // if(userId === undefined) {
-    //   navigate('/login')
-    // }
-    dispatch(addToCart({ ...product, qty, measurement }));
-    navigate('/login?redirect=/cart');
-    // navigate("/cart");
+    const newProduct = (({ _id, name, price }) => ({ _id, name, price }))(
+      product
+    );
+    newProduct.qty = qty;
+    newProduct.measurement = measurement;
+    dispatch(addToCart({ ...newProduct, qty, measurement }));
+
+    navigate("/cart");
   };
 
   const {
@@ -55,8 +43,6 @@ const ProductScreen = () => {
     refetch,
     error,
   } = useGetProductDetailsQuery(productId);
-
-  // const { userInfo } = useSelector((state) => state.auth);
 
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();
@@ -138,33 +124,18 @@ const ProductScreen = () => {
         <>
           <Meta title={product.name} description={product.description} />
           <Row>
-            <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
-              <h5>ingredients</h5>
-              {product.ingredient1}
-              <hr></hr>
-              {product.ingredient2}
-              <hr></hr>
-              {product.ingredient3}
-              <hr></hr>
-              {product.ingredient4}
-              <hr></hr>
-              {product.ingredient5}
-            </Col>
+
             <Col md={3}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <h3>{product.name}</h3>
+                  <h3 className="text-success font-weight-bold">{product.name}</h3>
                 </ListGroup.Item>
+ 
+                <ListGroup.Item><span className="text-danger">Price: </span> ₹{product.price}</ListGroup.Item>
                 <ListGroup.Item>
-                  <Rating
-                    value={product.rating}
-                    text={`${product.numReviews} reviews`}
-                  />
-                </ListGroup.Item>
-                <ListGroup.Item>Price: ₹{product.price}</ListGroup.Item>
-                <ListGroup.Item>
-                  Description: {product.description}
+                  <card>
+                <span className="text-danger"> Description: </span> <span className="text-dark font-weight-bold">{product.description}</span>
+                </card>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -223,6 +194,19 @@ const ProductScreen = () => {
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
+            </Col>
+            <Col md={6}>
+              <h5 className="text-success font-weight-bold">ingredients</h5>
+              <hr></hr>
+              {product.ingredient1}
+              <hr></hr>
+              {product.ingredient2}
+              <hr></hr>
+              {product.ingredient3}
+              <hr></hr>
+              {product.ingredient4}
+              <hr></hr>
+              {product.ingredient5}
             </Col>
           </Row>
           <Row className="review">

@@ -8,8 +8,7 @@ const Footer = () => {
       <Container>
         <Row>
           <Col className='text-center py-3'>
-            <p>Karaikudi E - Mart &copy; {currentYear}</p>
-            <p>Contact: 9789911533</p>
+            <p>Ariyakudi Chettinadu Snacks &copy; {currentYear}</p>
           </Col>
         </Row>
       </Container>

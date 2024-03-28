@@ -5,25 +5,19 @@ import Rating from './Rating';
 const Product = ({ product }) => {
   return (
     <Card className='my-3 p-3 rounded'>
-      <Link to={`/product/${product._id}`}>
+      {/* <Link to={`/product/${product._id}`}>
         <Card.Img src={product.image} variant='top' />
-      </Link>
+      </Link> */}
 
       <Card.Body>
         <Link to={`/product/${product._id}`}>
-          <Card.Title as='div' className='product-title'>
+          <Card.Title as='div' className='product-title fs-5 text-warning'>
+         
             <strong>{product.name}</strong>
           </Card.Title>
         </Link>
 
-        <Card.Text as='div'>
-          <Rating
-            value={product.rating}
-            text={`${product.numReviews} reviews`}
-          />
-        </Card.Text>
-
-        <Card.Text as='h3'>₹{product.price} per 250 Gram</Card.Text>
+        <Card.Text as='h6'>250 Grams: ₹ {product.price}</Card.Text>
       </Card.Body>
     </Card>
   );

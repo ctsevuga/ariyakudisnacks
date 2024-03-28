@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Table, Form, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,8 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useProfileMutation } from "../slices/usersApiSlice";
 import { useGetMyOrdersQuery } from "../slices/ordersApiSlice";
-import { setCredentials } from "../slices/authSlice";
+// import { setCredentials } from "../slices/authSlice";
+import { GlobalContext } from "../context/GlobalState";
 
 const ProfileScreen = () => {
   const [name, setName] = useState("");
@@ -22,17 +23,23 @@ const ProfileScreen = () => {
   const [postalCode, setPostalCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { user } = useContext(GlobalContext);
+  const user_id = user._id
 
-  const { data: orders, isLoading, error } = useGetMyOrdersQuery();
+  console.log(user_id);
+
+  // const { userInfo } = useSelector((state) => state.auth);
+
+  const { data: orders, isLoading, error } = useGetMyOrdersQuery(user_id);
+  console.log(orders);
 
   const [updateProfile, { isLoading: loadingUpdateProfile }] =
     useProfileMutation();
 
   useEffect(() => {
-    setName(userInfo.name);
-    setEmail(userInfo.email);
-  }, [userInfo.email, userInfo.name]);
+    setName(user.name);
+    setEmail(user.email);
+  }, [user.email, user.name]);
 
   const dispatch = useDispatch();
   const submitHandler = async (e) => {
@@ -43,7 +50,7 @@ const ProfileScreen = () => {
     } else {
       try {
         const res = await updateProfile({
-          _id: userInfo._id,
+          _id: user._id,
           name,
           email,
           password,
@@ -52,7 +59,7 @@ const ProfileScreen = () => {
           postalCode,
           phoneNumber,
         }).unwrap();
-        dispatch(setCredentials({ ...res }));
+        // dispatch(setCredentials({ ...res }));
         toast.success("Profile updated successfully");
       } catch (err) {
         toast.error(err?.data?.message || err.error);

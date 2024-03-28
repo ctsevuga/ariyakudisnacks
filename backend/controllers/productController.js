@@ -23,6 +23,8 @@ const getProducts = asyncHandler(async (req, res) => {
     .skip(pageSize * (page - 1));
 
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
+  // const products = await Product.find()
+  // res.json({ products});
 });
 
 // @desc    Fetch single product
@@ -44,13 +46,18 @@ const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: 'Sample name',
     price: 0,
-    user: req.user._id,
-    image: '/images/sample.jpg',
+    user: req.body.admin_id,
+    
     brand: 'Sample brand',
     category: 'Sample category',
     countInStock: 0,
     numReviews: 0,
     description: 'Sample description',
+    ingredient1:  'Sample ingredient',
+    ingredient2:  'Sample ingredient',
+    ingredient3:  'Sample ingredient',
+    ingredient4:  'Sample ingredient',
+    ingredient5:  'Sample ingredient',
   });
 
   const createdProduct = await product.save();
@@ -61,8 +68,8 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body;
+  const { name, price, description, image, brand, category, countInStock,
+    ingredient1,ingredient2,ingredient3,ingredient4,ingredient5  } =  req.body;
 
   const product = await Product.findById(req.params.id);
 
@@ -70,10 +77,15 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.name = name;
     product.price = price;
     product.description = description;
-    product.image = image;
+    
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;
+    product.ingredient1 = ingredient1;
+    product.ingredient2 = ingredient2;
+    product.ingredient3 = ingredient3;
+    product.ingredient4 = ingredient4;
+    product.ingredient5 = ingredient5;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);

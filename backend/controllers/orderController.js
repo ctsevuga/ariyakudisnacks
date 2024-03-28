@@ -6,12 +6,14 @@ import Order from '../models/orderModel.js';
 // @access  Private
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
+    user,
     orderItems,
     shippingAddress,
     itemsPrice,
     taxPrice,
     shippingPrice,
     totalPrice,
+    
   } = req.body;
 
   if (orderItems && orderItems.length === 0) {
@@ -24,7 +26,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
         product: x._id,
         _id: undefined,
       })),
-      user: req.user._id,
+      user,
       shippingAddress,
       itemsPrice,
       taxPrice,
@@ -42,7 +44,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/myorders
 // @access  Private
 const getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id });
+  const orders = await Order.find({ user: req.params.user_id });
   res.json(orders);
 });
 
@@ -56,6 +58,7 @@ const getOrderById = asyncHandler(async (req, res) => {
   );
 
   if (order) {
+    console.log(order.user.name)
     res.json(order);
   } else {
     res.status(404);

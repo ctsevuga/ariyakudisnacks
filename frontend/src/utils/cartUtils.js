@@ -9,7 +9,7 @@ export const updateCart = (state) => {
   );
 
   // Calculate the shipping price
-  state.shippingPrice = addDecimals(state.itemsPrice < 201 ? 50 : state.itemsPrice > 200 && state.itemsPrice < 501 ? 40 :state.itemsPrice > 500 && state.itemsPrice < 1001 ?20:0);
+  state.shippingPrice = addDecimals(state.itemsPrice < 201 ? 50 : state.itemsPrice > 200 && state.itemsPrice < 501 ? 30 :state.itemsPrice > 500 && state.itemsPrice < 1001 ?20:0);
   // state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 10);
   // Calculate the tax price
   // state.taxPrice = addDecimals(Number((0.15 * state.itemsPrice).toFixed(2)));

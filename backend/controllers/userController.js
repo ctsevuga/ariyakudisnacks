@@ -1,5 +1,4 @@
 import asyncHandler from '../middleware/asyncHandler.js';
-import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 
 // @desc    Auth user & get token
@@ -10,8 +9,8 @@ const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
+  if (user && (user.password === password)) {
+    
 
     res.json({
       _id: user._id,
@@ -45,7 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    generateToken(res, user._id);
+   
 
     res.status(201).json({
       _id: user._id,
@@ -90,13 +89,13 @@ const forgot = asyncHandler(async (req, res) => {
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 // @access  Public
-const logoutUser = (req, res) => {
-  res.cookie('jwt', '', {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-  res.status(200).json({ message: 'Logged out successfully' });
-};
+// const logoutUser = (req, res) => {
+//   res.cookie('jwt', '', {
+//     httpOnly: true,
+//     expires: new Date(0),
+//   });
+//   res.status(200).json({ message: 'Logged out successfully' });
+// };
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -242,7 +241,7 @@ export {
   authUser,
   registerUser,
   forgot,
-  logoutUser,
+  // logoutUser,
   getUserProfile,
   updateUserProfile,
   getUsers,

@@ -27,10 +27,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
+
     brand: {
       type: String,
       required: true,
@@ -64,13 +61,11 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    
-      ingredient1: { type: String},
+    ingredient1: { type: String},
       ingredient2: { type: String},
       ingredient3: { type: String},
       ingredient4: { type: String},
       ingredient5: { type: String},
-   
   },
   {
     timestamps: true,

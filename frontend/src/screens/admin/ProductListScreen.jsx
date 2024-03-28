@@ -1,10 +1,12 @@
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import Paginate from '../../components/Paginate';
+import { GlobalContext } from "../../context/GlobalState";
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
@@ -14,6 +16,8 @@ import { toast } from 'react-toastify';
 
 const ProductListScreen = () => {
   const { pageNumber } = useParams();
+  const { user } = useContext(GlobalContext);
+  const admin_id = user._id;
 
   const { data, isLoading, error, refetch } = useGetProductsQuery({
     pageNumber,
@@ -39,7 +43,7 @@ const ProductListScreen = () => {
   const createProductHandler = async () => {
     if (window.confirm('Are you sure you want to create a new product?')) {
       try {
-        await createProduct();
+        await createProduct({ admin_id });
         refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);

@@ -1,28 +1,35 @@
-// import React, { useEffect } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { toast } from "react-toastify";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Button, Row, Col, ListGroup, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import Loader from "../components/Loader";
 import { useCreateOrderMutation } from "../slices/ordersApiSlice";
 import { clearCartItems } from "../slices/cartSlice";
+import { GlobalContext } from "../context/GlobalState";
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
+  const { user } = useContext(GlobalContext);
+  const userId = user._id;
 
   const cart = useSelector((state) => state.cart);
-  console.log(cart.shippingAddress);
 
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   const dispatch = useDispatch();
+
   const placeOrderHandler = async () => {
     try {
       const res = await createOrder({
+        user: userId,
         orderItems: cart.cartItems,
+
         shippingAddress: cart.shippingAddress,
+
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
@@ -60,21 +67,12 @@ const PlaceOrderScreen = () => {
                   {cart.cartItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
-                        <Col md={1}>
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            fluid
-                            rounded
-                          />
-                        </Col>
                         <Col>
-                          <Link to={`/product/₹{item.product}`}>
-                            {item.name}
-                          </Link>
+                          {/* <Link to={`/product/₹{item.product}`}> */}(
+                          {item.name}){/* </Link> */}
                         </Col>
-                        <Col md={2}>{item.measurement}</Col>
-                        <Col md={2}>{item.price * item.qty}</Col>
+                        <Col md={2}>({item.measurement})</Col>
+                        <Col md={2}>({item.price * item.qty})</Col>
                       </Row>
                     </ListGroup.Item>
                   ))}
@@ -101,18 +99,14 @@ const PlaceOrderScreen = () => {
                   <Col>₹{cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
-                {/* <Row>
-                  <Col>Tax</Col>
-                  <Col>₹{cart.taxPrice}</Col>
-                </Row> */}
-              </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
                   <Col>₹{cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               <ListGroup.Item>
                 {error && (
                   <Message variant="danger">{error.data.message}</Message>
@@ -124,7 +118,6 @@ const PlaceOrderScreen = () => {
                   className="btn-block"
                   disabled={cart.cartItems === 0}
                   onClick={placeOrderHandler}
-                  
                 >
                   Place Order
                 </Button>

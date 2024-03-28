@@ -1,26 +1,30 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import Message from '../../components/Message';
-import Loader from '../../components/Loader';
-import FormContainer from '../../components/FormContainer';
-import { toast } from 'react-toastify';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import Message from "../../components/Message";
+import Loader from "../../components/Loader";
+import FormContainer from "../../components/FormContainer";
+import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
-  useUploadProductImageMutation,
-} from '../../slices/productsApiSlice';
+} from "../../slices/productsApiSlice";
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState('');
-  const [brand, setBrand] = useState('');
-  const [category, setCategory] = useState('');
+
+  const [brand, setBrand] = useState("");
+  const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
+  const [ingredient1, setIngredient1] = useState('');
+  const [ingredient2, setIngredient2] = useState('');
+  const [ingredient3, setIngredient3] = useState('');
+  const [ingredient4, setIngredient4] = useState('');
+  const [ingredient5, setIngredient5] = useState('');
 
   const {
     data: product,
@@ -32,9 +36,6 @@ const ProductEditScreen = () => {
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
 
-  const [uploadProductImage, { isLoading: loadingUpload }] =
-    useUploadProductImageMutation();
-
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
@@ -44,15 +45,20 @@ const ProductEditScreen = () => {
         productId,
         name,
         price,
-        image,
+
         brand,
         category,
         description,
         countInStock,
+        ingredient1,
+        ingredient2,
+        ingredient3,
+        ingredient4,
+        ingredient5,
       });
-      toast.success('product updated successfully');
+      toast.success("product updated successfully");
       refetch();
-      navigate('/admin/productlist');
+      navigate("/admin/productlist");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -62,25 +68,18 @@ const ProductEditScreen = () => {
     if (product) {
       setName(product.name);
       setPrice(product.price);
-      setImage(product.image);
+
       setBrand(product.brand);
       setCategory(product.category);
       setCountInStock(product.countInStock);
       setDescription(product.description);
+      setIngredient1(product.ingredient1);
+      setIngredient2(product.ingredient2);
+      setIngredient3(product.ingredient3);
+      setIngredient4(product.ingredient4);
+      setIngredient5(product.ingredient5);
     }
   }, [product]);
-
-  const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    formData.append('image', e.target.files[0]);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success(res.message);
-      setImage(res.image);
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
-  };
 
   return (
     <>
@@ -96,6 +95,8 @@ const ProductEditScreen = () => {
           <Message variant='danger'>{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
+          <Row>
+          <Col md={6}>
             <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
               <Form.Control
@@ -116,7 +117,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='image'>
+            {/* <Form.Group controlId='image'>
               <Form.Label>Image</Form.Label>
               <Form.Control
                 type='text'
@@ -130,7 +131,7 @@ const ProductEditScreen = () => {
                 type='file'
               ></Form.Control>
               {loadingUpload && <Loader />}
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group controlId='brand'>
               <Form.Label>Brand</Form.Label>
@@ -170,8 +171,57 @@ const ProductEditScreen = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
+             
             </Form.Group>
-
+            </Col>
+            <Col md={6}>
+            <Form.Group controlId='ingredient1'>
+              <Form.Label>Ingredient</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter ingredient'
+                value={ingredient1}
+                onChange={(e) => setIngredient1(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId='ingredient2'>
+              <Form.Label>Ingredient</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter ingredient'
+                value={ingredient2}
+                onChange={(e) => setIngredient2(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId='ingredient3'>
+              <Form.Label>Ingredient</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter ingredient'
+                value={ingredient3}
+                onChange={(e) => setIngredient3(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId='ingredient4'>
+              <Form.Label>Ingredient</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter ingredient'
+                value={ingredient4}
+                onChange={(e) => setIngredient4(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId='ingredient5'>
+              <Form.Label>Ingredient</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter ingredient'
+                value={ingredient5}
+                onChange={(e) => setIngredient5(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            </Col>
+            </Row>
             <Button
               type='submit'
               variant='primary'

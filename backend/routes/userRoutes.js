@@ -3,7 +3,7 @@ import {
   authUser,
   registerUser,
   forgot,
-  logoutUser,
+  // logoutUser,
   getUserProfile,
   updateUserProfile,
   getUsers,
@@ -12,22 +12,22 @@ import {
   updateUser,
   profileAddress,
 } from '../controllers/userController.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
+
 
 const router = express.Router();
 
-router.route('/').post(registerUser).get(protect, admin, getUsers).put(forgot);
+router.route('/').post(registerUser).get( getUsers).put(forgot);
 router.post('/auth', authUser);
-router.post('/logout', logoutUser);
+// router.post('/logout', logoutUser);
 router
   .route('/profile')
-  .get(protect, getUserProfile)
-  .put(protect, updateUserProfile);
+  .get( getUserProfile)
+  .put( updateUserProfile);
   router.put('/address/:id', profileAddress);
 router
   .route('/:id')
-  .delete(protect, admin, deleteUser)
-  .get(protect, admin, getUserById)
-  .put(protect, admin, updateUser);
+  .delete( deleteUser)
+  .get( getUserById)
+  .put( updateUser);
 
 export default router;

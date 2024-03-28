@@ -1,10 +1,12 @@
 import path from 'path';
+import { normalize } from 'path';
 import express from 'express';
 import multer from 'multer';
 const router = express.Router();
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
+   
     cb(null, 'uploads/');
   },
   filename(req, file, cb) {
@@ -32,6 +34,9 @@ const upload = multer({
 });
 
 router.post('/', upload.single('image'), (req, res) => {
+  console.log(req.file.path)
+  console.log(req.file)
+  console.log(req.body)
   res.send({
     message: 'Image uploaded successfully',
     image: `/${req.file.path}`,
