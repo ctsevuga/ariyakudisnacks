@@ -3,12 +3,21 @@ import { Table, Button } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import FormContainer from "../../components/FormContainer";
+import { useEffect,useContext } from 'react';
 import { useGetOrdersQuery } from '../../slices/ordersApiSlice';
+import { GlobalContext } from "../../context/GlobalState";
+import { useNavigate } from "react-router-dom";
 
 const OrderListScreen = () => {
+  const navigate = useNavigate();
   const { data: orders, isLoading, error } = useGetOrdersQuery();
-  console.log(orders);
+  const { user } = useContext(GlobalContext);
+
+  useEffect(() => {
+    if (!user.isAdmin) {
+      navigate("/");
+    }
+  }, [navigate. user]);
 
   return (
     <>

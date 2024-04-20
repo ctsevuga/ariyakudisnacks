@@ -1,10 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
 import { Row, Col, ListGroup, Image, Button, Card } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import Message from "../components/Message";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
+import { GlobalContext } from "../context/GlobalState";
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ const CartScreen = () => {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  const { user } = useContext(GlobalContext);
 
   console.log(cartItems);
 
@@ -20,10 +23,13 @@ const CartScreen = () => {
   };
 
   const navigateHandler = () => {
-    navigate("/");
+    navigate("/home");
   };
 
   const checkoutHandler = () => {
+    if(!user){
+      navigate("/");
+    }
     navigate("/shipping");
   };
 

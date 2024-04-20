@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { useNavigate } from "react-router-dom";
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,26 +32,29 @@ import UserEditScreen from './screens/admin/UserEditScreen';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { GlobalProvider } from "./context/GlobalState";
+// import { GlobalContext } from "../context/GlobalState";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
-      <Route index={true} path='/' element={<HomeScreen />} />
+      <Route index={true} path='/' element={<LoginScreen />} />
+      <Route path='/home' element={<HomeScreen />} />
       <Route path='/product/:id' element={<ProductScreen />} />
       <Route path='/cart' element={<CartScreen />} />
       <Route path='/shipping' element={<ShippingScreen />} />
       <Route path='/placeorder' element={<PlaceOrderScreen />} />
       <Route path='/order/:id' element={<OrderScreen />} />
-      <Route path='/login' element={<LoginScreen />} />
+      
       <Route path='/register' element={<RegisterScreen />} />
       <Route path='/forgot' element={<ForgotScreen />} />
       <Route path='/profile' element={<ProfileScreen />} />
-      {/* Admin users */}
-      <Route path='/admin/productlist' element={<ProductListScreen />} />
+       {/* Admin users */}
+       <Route path='/admin/productlist' element={<ProductListScreen />} />
       <Route path='/admin/userlist' element={<UserListScreen />} />
       <Route path='/admin/orderlist' element={<OrderListScreen />} />
       <Route path='/admin/product/:id/edit' element={<ProductEditScreen />} />
       <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+      
     </Route>
   )
 );
@@ -67,5 +72,7 @@ root.render(
   </GlobalProvider>
   
 );
+
+
 
 reportWebVitals();

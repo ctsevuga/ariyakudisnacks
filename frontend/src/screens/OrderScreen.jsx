@@ -60,7 +60,7 @@ const OrderScreen = () => {
                   Delivered on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message variant="danger">Not Delivered - Delivered within 2 Hours</Message>
+                <Message variant="success">Order Successfully Placed - Delivered within 2 Hours at your Door step</Message>
               )}
             </ListGroup.Item>
 

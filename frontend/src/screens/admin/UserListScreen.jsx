@@ -9,11 +9,22 @@ import {
   useGetUsersQuery,
 } from '../../slices/usersApiSlice';
 import { toast } from 'react-toastify';
+import { GlobalContext } from "../../context/GlobalState";
+import { useNavigate } from "react-router-dom";
+import { useEffect,useContext } from 'react';
 
 const UserListScreen = () => {
   const { data: users, refetch, isLoading, error } = useGetUsersQuery();
+  const navigate = useNavigate();
+  const { user } = useContext(GlobalContext);
 
   const [deleteUser] = useDeleteUserMutation();
+
+  useEffect(() => {
+    if (!user.isAdmin) {
+      navigate("/");
+    }
+  }, [navigate. user]);
 
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure')) {

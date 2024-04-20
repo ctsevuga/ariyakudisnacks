@@ -10,20 +10,30 @@ import { GlobalContext } from "../context/GlobalState";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
-
+  const { setUser } = useContext(GlobalContext);
   const navigate = useNavigate();
   const { user } = useContext(GlobalContext);
   const { removeUser } = useContext(GlobalContext);
+ 
 
   const logoutHandler = async () => {
     try {
       removeUser(user._id);
-      localStorage.removeItem("userInfo");
-      navigate("/login");
+      
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
   };
+
+  // const loginHandler = async () => {
+  //   try {
+  //     // removeUser(user._id);
+  //    navigate("/login");
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   return (
     <header>
@@ -49,7 +59,7 @@ const Header = () => {
                   )}
                 </Nav.Link>
               </LinkContainer>
-              {user.name ? (
+              { user.name ? (
                 <>
                   <NavDropdown title={user.name} id="username">
                     <LinkContainer to="/profile">
@@ -61,7 +71,7 @@ const Header = () => {
                   </NavDropdown>
                 </>
               ) : (
-                <LinkContainer to="/login">
+                <LinkContainer to="/">
                   <Nav.Link>
                     <FaUser /> Sign In
                     

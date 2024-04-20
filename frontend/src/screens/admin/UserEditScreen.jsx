@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import Message from '../../components/Message';
@@ -10,15 +10,20 @@ import {
   useGetUserDetailsQuery,
   useUpdateUserMutation,
 } from '../../slices/usersApiSlice';
+import { GlobalContext } from "../../context/GlobalState";
+
+
 
 const UserEditScreen = () => {
   const { id: userId } = useParams();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const { user } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
   const {
-    data: user,
+    data: userData,
     isLoading,
     error,
     refetch,
@@ -26,7 +31,11 @@ const UserEditScreen = () => {
 
   const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user.isAdmin) {
+      navigate("/");
+    }
+  }, [navigate. user]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -41,12 +50,12 @@ const UserEditScreen = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      setName(user.name);
-      setEmail(user.email);
-      setIsAdmin(user.isAdmin);
+    if (userData) {
+      setName(userData.name);
+      setEmail(userData.email);
+      setIsAdmin(userData.isAdmin);
     }
-  }, [user]);
+  }, [userData]);
 
   return (
     <>

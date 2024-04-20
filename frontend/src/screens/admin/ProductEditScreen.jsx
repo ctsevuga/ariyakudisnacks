@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState,useContext } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import Message from "../../components/Message";
@@ -9,10 +9,11 @@ import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
 } from "../../slices/productsApiSlice";
+import { GlobalContext } from "../../context/GlobalState";
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
-
+  const { user } = useContext(GlobalContext);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
 
@@ -37,6 +38,11 @@ const ProductEditScreen = () => {
     useUpdateProductMutation();
 
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!user.isAdmin) {
+      navigate("/");
+    }
+  }, [navigate. user]);
 
   const submitHandler = async (e) => {
     e.preventDefault();

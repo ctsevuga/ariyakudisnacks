@@ -14,7 +14,7 @@ const LoginScreen = () => {
   const { setUser } = useContext(GlobalContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  // const userInfo = JSON.parse(localStorage.getItem("userInfo"))|| {};
 
   const navigate = useNavigate();
 
@@ -34,10 +34,12 @@ const LoginScreen = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      localStorage.setItem("userInfo", JSON.stringify(res));
+      
       setUser(res);
+      localStorage.setItem("userInfo", JSON.stringify(res));
       console.log(res.isAdmin);
-      navigate(redirect);
+      // navigate(redirect);
+      navigate("/home");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }

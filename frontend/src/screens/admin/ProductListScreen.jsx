@@ -1,12 +1,14 @@
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
-import { useContext } from 'react';
+import { useEffect,useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import Paginate from '../../components/Paginate';
 import { GlobalContext } from "../../context/GlobalState";
+
+import { useNavigate } from "react-router-dom";
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
@@ -14,7 +16,9 @@ import {
 } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
 
+
 const ProductListScreen = () => {
+  const navigate = useNavigate();
   const { pageNumber } = useParams();
   const { user } = useContext(GlobalContext);
   const admin_id = user._id;
@@ -50,6 +54,12 @@ const ProductListScreen = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!user.isAdmin) {
+      navigate("/");
+    }
+  }, [navigate. user]);
 
   return (
     <>
