@@ -14,7 +14,7 @@ const LoginScreen = () => {
   const { setUser } = useContext(GlobalContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const userInfo = JSON.parse(localStorage.getItem("userInfo"))|| {};
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"))|| null;
 
   const navigate = useNavigate();
 
@@ -22,13 +22,21 @@ const LoginScreen = () => {
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
-  const redirect = sp.get("redirect") || "/";
+  const redirect = sp.get("redirect") || "/home";
+
+  useEffect(() => {
+    if (userInfo) {
+      setUser((userInfo));
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
 
   // useEffect(() => {
   //   if (userInfo) {
-  //     navigate(redirect);
+  //   setUser((userInfo));
+  //   navigate("/home");
   //   }
-  // }, [navigate, redirect, userInfo]);
+  // }, [ userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -54,7 +62,7 @@ const LoginScreen = () => {
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type="email"
-            placeholder="Enter email"
+            placeholder="Enter Your Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>

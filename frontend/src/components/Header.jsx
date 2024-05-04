@@ -19,7 +19,7 @@ const Header = () => {
   const logoutHandler = async () => {
     try {
       removeUser(user._id);
-      
+      localStorage.removeItem('userInfo');
       navigate("/");
     } catch (err) {
       console.error(err);
@@ -29,7 +29,7 @@ const Header = () => {
   // const loginHandler = async () => {
   //   try {
   //     // removeUser(user._id);
-  //    navigate("/login");
+  //    navigate("/");
   //   } catch (err) {
   //     console.error(err);
   //   }
@@ -71,9 +71,10 @@ const Header = () => {
                   </NavDropdown>
                 </>
               ) : (
-                <LinkContainer to="/">
-                  <Nav.Link>
-                    <FaUser /> Sign In
+                
+                  <LinkContainer exact to='/'>
+                  <Nav.Link >
+                    <FaUser  /> Sign In
                     
                   </Nav.Link>
                 </LinkContainer>
